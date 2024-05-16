@@ -7,43 +7,44 @@
 #define FREE 3
 
 //PRIVATE FUNCTIONS
+node *createNode(int val)
+{
+    node *n = (node*) malloc(sizeof(node));
+    n->val = val;
+    n->next_node = NULL;
+
+    return n;
+}
+
 void push(stack *s, int value)
 {   
-    node *n = (node*) malloc(sizeof(node));
-    n->val = value;
+    node *n = createNode(value);
+    n->next_node = s->top_node;
 
-    if (s->len == 0)
-    {
-        n->next_node = 0;
-    }
-    else
-    {
-        n->next_node = s->nodes[s->len-1];
-    }
+    s->top_node = n;
 
-    s->nodes[s->len++] = n;
-    printf("new size: %d\n", sizeof(node*) * s->len);
-    s->nodes = (node**) realloc(s->nodes, sizeof(node*) * s->len);    
-
-    if (!s->nodes)
+    if (!s->top_node)
     {
         printf("COULDNT ALLOCATE MEMORY FOR MORE NODES\n");
         return;
     }
-
-    s->top_node = n;
+    s->len++;
     //printf("Adding node: %d next %p\n", s->nodes[s->len-1]->val, s->nodes[s->len-1]->next_node);
 }
 
-void pop()
+void pop(stack *s)
 {
+    node *uwu = s->top_node;
+    s->top_node = s->top_node->next_node;
 
+    s->len--;
+    free(uwu);
 }
 
 void printStack(stack *s)
 {
     node *head = s->top_node;
-    for (int i = 0; i < s->len; i++)
+    while (head != NULL)
     {
         printf("%d -> ", head->val);
         head = head->next_node;
@@ -53,7 +54,13 @@ void printStack(stack *s)
 
 void freeStack(stack *s)
 {
-    free(s->nodes);
+    // free nodes
+    while (s->top_node != NULL)
+    {
+        pop(s);
+    }
+
+    // free structure
     free(s->self);
 }
 
@@ -63,7 +70,7 @@ stack Stack()
     s->self = s;
     s->len = 0;
 
-    s->nodes = (node**) realloc(NULL, sizeof(node*) * s->len);
+    s->top_node = NULL;
 
     s->push = push;
     s->pop = pop;

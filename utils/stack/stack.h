@@ -16,7 +16,6 @@ typedef struct node
 typedef struct stack 
 {
     struct stack *self;
-    struct node **nodes;
     struct node *top_node;
     int len;
     
@@ -32,12 +31,15 @@ stack Stack();
 
 #ifdef _PRIVATE_
 
+node createNode(int val);
+
 void push(stack *s, int value);
 void pop(stack *s);
 
 void printStack(stack *s);
 
 void freeStack(stack *s);
+
 #endif
 
 #endif

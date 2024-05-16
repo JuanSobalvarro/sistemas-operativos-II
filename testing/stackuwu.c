@@ -12,12 +12,18 @@ int main()
 
     s.push(&s, 2);
     s.print(&s);
+    
+    s.pop(&s);
 
     s.push(&s, -2);
     s.push(&s, -7);
 
     s.print(&s);
     
+    s.pop(&s);
+
+    s.print(&s);
+
     s.free(&s);
     return 0;
 }
